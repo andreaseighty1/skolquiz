@@ -78,6 +78,9 @@ body{
   cursor:pointer;transition:.15s;white-space:nowrap;
 }
 .tab:hover{color:var(--text);background:rgba(255,255,255,.06)}
+.tab:focus-visible,.btn:focus-visible,.cell:focus-visible,.mode-card:focus-visible,.cat-emoji-trigger:focus-visible{
+  outline:3px solid var(--accent);outline-offset:3px;
+}
 .tab.active{
   color:#fff;
   background:linear-gradient(135deg,rgba(94,174,255,.25),rgba(167,139,250,.2));
@@ -185,9 +188,9 @@ textarea{resize:vertical;line-height:1.5;min-height:60px}
   border:1px solid rgba(255,255,255,.1);
   padding:16px;
   box-shadow:0 8px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06);
+  overflow-x:auto;
 }
-.board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
-@media(max-width:900px){.board{grid-template-columns:repeat(3,1fr)}}
+.board{display:grid;grid-template-columns:repeat(5,minmax(140px,1fr));gap:8px;min-width:700px}
 
 /* Kategorirubriker */
 .cat-hdr{
@@ -226,6 +229,7 @@ textarea{resize:vertical;line-height:1.5;min-height:60px}
   color:var(--cell-gold);
   text-shadow:0 0 18px rgba(251,191,36,.6);
   box-shadow:0 2px 12px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06);
+  appearance:none;width:100%;font-style:normal;
 }
 .cell::before{
   content:'';position:absolute;inset:0;
@@ -308,7 +312,7 @@ textarea{resize:vertical;line-height:1.5;min-height:60px}
 }
 .cat-name-inp:hover{border-color:var(--line);background:rgba(0,0,0,.2)}
 .cat-name-inp:focus{outline:none;border-color:var(--accent);background:rgba(0,0,0,.3)}
-.cat-chevron{color:var(--muted);font-size:12px;transition:.2s}
+.cat-chevron{color:var(--muted);font-size:12px;transition:.2s;background:none;border:0;padding:8px;cursor:pointer}
 .cat-block.open .cat-chevron{transform:rotate(180deg)}
 .cat-body{display:none;border-top:1px solid var(--line);padding:14px}
 .cat-block.open .cat-body{display:block}
@@ -348,6 +352,7 @@ textarea{resize:vertical;line-height:1.5;min-height:60px}
   background:rgba(255,255,255,.04);
   padding:16px;cursor:pointer;transition:.18s;text-align:left;
   box-shadow:0 3px 14px rgba(0,0,0,.2);
+  width:100%;font:inherit;color:inherit;
 }
 .mode-card:hover{background:rgba(255,255,255,.08);transform:translateY(-2px);box-shadow:0 7px 22px rgba(0,0,0,.3)}
 .mode-card.sel{
@@ -377,7 +382,7 @@ dialog[open]{animation:dlgIn .28s cubic-bezier(.34,1.3,.64,1) both}
 dialog::backdrop{background:rgba(0,0,15,.83);backdrop-filter:blur(7px)}
 
 /* Frågedialogen – header-band */
-#dlgQ{overflow:hidden}
+#dlgQ{overflow-x:hidden;overflow-y:auto}
 .modal{padding:0}
 .dlg-header{
   padding:16px 22px 14px;
@@ -415,6 +420,37 @@ dialog::backdrop{background:rgba(0,0,15,.83);backdrop-filter:blur(7px)}
   letter-spacing:.01em;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
 }
+#dlgQ .q-display,
+#dlgQ .a-display,
+#dlgQ #dlgImgWrap,
+#dlgQ #dlgAudioWrap,
+#dlgQ .timer-bar,
+#dlgQ .timer-row,
+#dlgQ #captainArea{transition:all .22s ease}
+#dlgQ.grading-mode .dlg-body{padding-top:14px}
+#dlgQ.grading-mode #dlgImgWrap,
+#dlgQ.grading-mode #dlgAudioWrap,
+#dlgQ.grading-mode .timer-bar,
+#dlgQ.grading-mode #captainArea{display:none!important}
+#dlgQ.grading-mode .q-display{
+  padding:12px 16px;
+  font-size:clamp(16px,2vw,22px);
+  line-height:1.25;
+  margin-bottom:10px;
+  border-radius:14px;
+  background:rgba(255,255,255,.025);
+}
+#dlgQ.grading-mode .a-display{
+  padding:14px 16px;
+  font-size:clamp(18px,2.2vw,26px);
+  margin-bottom:12px;
+}
+#dlgQ.grading-mode .timer-row{
+  justify-content:flex-end;
+  margin-bottom:10px;
+}
+#dlgQ.grading-mode .timer-num{display:none}
+#dlgQ.grading-mode .marking{margin-top:10px}
 
 /* Svarsruta */
 @keyframes answerReveal{
@@ -533,10 +569,11 @@ footer{margin-top:20px;padding:14px 0;border-top:1px solid rgba(255,255,255,.06)
 .q-audio-wrap{margin-bottom:14px;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:rgba(0,0,0,.25);padding:14px}
 .q-audio-wrap audio{width:100%;border-radius:8px;accent-color:var(--accent);display:block}
 .q-audio-label{font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600}
-.q-spotify-wrap{margin-bottom:14px;border-radius:14px;overflow:hidden;position:relative}
-.q-spotify-cover{position:absolute;top:0;left:0;width:66%;height:100%;background:#0a1625;border-radius:14px 0 0 14px;pointer-events:none;z-index:2}
+.q-spotify-wrap{margin-bottom:14px;border-radius:14px;overflow:hidden;position:relative;isolation:isolate}
+.q-spotify-cover{position:absolute;top:0;left:0;width:62%;height:100%;display:flex;align-items:flex-start;justify-content:flex-start;padding:10px 12px;background:linear-gradient(90deg,rgba(10,22,37,.98) 0%,rgba(10,22,37,.94) 45%,rgba(10,22,37,.72) 74%,rgba(10,22,37,.12) 100%);backdrop-filter:blur(10px) saturate(.9);border-radius:14px 0 0 14px;border-right:1px solid rgba(255,255,255,.06);box-shadow:inset -18px 0 30px rgba(10,22,37,.24);pointer-events:none;z-index:2}
+.q-spotify-cover::before{content:'Spotify-förhandslyssning';font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:rgba(255,255,255,.7);padding:6px 10px;border-radius:999px;background:rgba(8,15,25,.55);border:1px solid rgba(255,255,255,.08)}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}50%{box-shadow:0 0 0 8px rgba(52,211,153,0)}}
-.q-spotify-hint{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:11px;color:rgba(255,255,255,.35);padding:3px;z-index:3;pointer-events:none}
+.q-spotify-hint{position:absolute;bottom:8px;left:12px;right:auto;text-align:left;font-size:11px;color:rgba(255,255,255,.52);padding:6px 10px;border-radius:999px;background:rgba(8,15,25,.5);border:1px solid rgba(255,255,255,.08);z-index:3;pointer-events:none}
 
 /* ── AUDIO SEARCH DIALOG ─────────────────────────────────── */
 #dlgAudioSearch{width:min(820px,calc(100% - 20px))}
@@ -609,6 +646,9 @@ footer{margin-top:20px;padding:14px 0;border-top:1px solid rgba(255,255,255,.06)
 .podium-block.p2{height:clamp(95px,14vh,160px);background:linear-gradient(180deg,#e2e8f0,#94a3b8,#475569);box-shadow:0 -6px 28px rgba(148,163,184,.3)}
 .podium-block.p3{height:clamp(72px,11vh,130px);background:linear-gradient(180deg,#c4b5fd,#a78bfa,#6d28d9);box-shadow:0 -5px 22px rgba(167,139,250,.3)}
 .podium-close-row{position:relative;z-index:2;margin-top:28px;display:flex;gap:12px}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
 </style>
 <body>
 <audio id="bgMusic" src="bg_music.mp3" preload="auto" loop=""></audio>
@@ -636,11 +676,11 @@ footer{margin-top:20px;padding:14px 0;border-top:1px solid rgba(255,255,255,.06)
   </div>
 
   <!-- TABS -->
-  <div class="tab-row">
-    <button class="tab active" data-v="game">🎮 Spela</button>
-    <button class="tab" data-v="edit">✏️ Redigera frågor</button>
-    <button class="tab" data-v="fetch">📚 Hämta frågor</button>
-    <button class="tab" data-v="settings">⚙️ Inställningar</button>
+  <div class="tab-row" role="tablist" aria-label="Huvudmeny">
+    <button class="tab active" data-v="game" role="tab" aria-selected="true">🎮 Spela</button>
+    <button class="tab" data-v="edit" role="tab" aria-selected="false">✏️ Redigera frågor</button>
+    <button class="tab" data-v="fetch" role="tab" aria-selected="false">📚 Hämta frågor</button>
+    <button class="tab" data-v="settings" role="tab" aria-selected="false">⚙️ Inställningar</button>
   </div>
 
   <!-- ══════════════════════════════════════════════
@@ -673,7 +713,7 @@ footer{margin-top:20px;padding:14px 0;border-top:1px solid rgba(255,255,255,.06)
       <div class="team-score">?</div>
     </div></div>
     <div class="board-card">
-      <div class="board" id="board"><div class="cat-hdr">🌊 Hav &amp; vatten</div><div class="cat-hdr">🐾 Djur &amp; natur</div><div class="cat-hdr">🇸🇪 Sverige</div><div class="cat-hdr">🎮 Film, spel &amp; musik</div><div class="cat-hdr">🧠 Kluringar</div><div class="cell">100</div><div class="cell">100</div><div class="cell">100</div><div class="cell">100</div><div class="cell">100</div><div class="cell">200</div><div class="cell">200</div><div class="cell">200</div><div class="cell">200</div><div class="cell">200</div><div class="cell">300</div><div class="cell">300</div><div class="cell">300</div><div class="cell">300</div><div class="cell">300</div><div class="cell">400</div><div class="cell">400</div><div class="cell">400</div><div class="cell">400</div><div class="cell">400</div><div class="cell">500</div><div class="cell">500</div><div class="cell">500</div><div class="cell">500</div><div class="cell">500</div></div>
+      <div class="board" id="board" role="grid" aria-label="Quiztavla"><div class="cat-hdr">🌊 Hav &amp; vatten</div><div class="cat-hdr">🐾 Djur &amp; natur</div><div class="cat-hdr">🇸🇪 Sverige</div><div class="cat-hdr">🎮 Film, spel &amp; musik</div><div class="cat-hdr">🧠 Kluringar</div></div>
       <div class="board-meta">
         <span id="modeLbl" style="font-weight:700;color:var(--accent)">Spelläge: 👥 Alla svarar</span>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
@@ -702,15 +742,15 @@ footer{margin-top:20px;padding:14px 0;border-top:1px solid rgba(255,255,255,.06)
         📂 Ladda quiz-fil
         <input type="file" id="btnLoadJson" accept=".quiz,.json" style="display:none">
       </label>
-      <button class="btn purple sm" id="btnExport">📤 Exportera HTML</button>
+      <button class="btn purple sm" id="btnExport" style="display:none" aria-hidden="true" tabindex="-1">📤 Exportera HTML</button>
       <button class="btn warn sm" id="btnResetEditor">♻️ Återställ standard</button>
       <span class="status-badge saved" id="editorBadge">✅ Sparat!</span>
     </div>
     <div class="editor-hint">
       <strong style="color:var(--text)">💾 Spara</strong> — uppdaterar spelplanen och sparar i webbläsarens minne. <strong style="color:#fde68a">Klicka alltid Spara efter att du redigerat klart.</strong> Försvinner om du byter dator.<br>
-      <strong style="color:#a7f3d0">⬇️ Spara quiz-fil</strong> — laddar ner en <code>.quiz</code>-fil med alla frågor och bilder. Spara på Teams/OneDrive. <em style="color:var(--text)">Använd alltid den här för att aldrig förlora arbetet.</em><br>
+      <strong style="color:#a7f3d0">⬇️ Spara quiz-fil</strong> — laddar ner en <code>.quiz</code>-fil med frågor, bildlänkar och ljudlänkar. Spara på Teams/OneDrive. <em style="color:var(--text)">Använd alltid den här för att aldrig förlora arbetet.</em><br>
       <strong style="color:#a7f3d0">📂 Ladda quiz-fil</strong> — öppnar en sparad <code>.quiz</code>-fil och laddar in den i appen.<br>
-      <strong style="color:#ddd6fe">📤 Exportera HTML</strong> — skapar en komplett HTML-fil med frågorna inbakade. Bra för att köra quizet utan att ta med en separat fil.
+      <strong style="color:var(--text)">💡 Tips</strong> — i den här versionen är <code>.quiz</code>-filen ditt viktigaste format när du vill fortsätta bygga vidare eller dela quizet med en kollega.
     </div>
     <div id="editorAccordion"><div class="cat-block open">
       <div class="cat-head">
@@ -719,7 +759,7 @@ footer{margin-top:20px;padding:14px 0;border-top:1px solid rgba(255,255,255,.06)
           <button type="button" class="cat-emoji-trigger" data-emoji-ci="0" title="Välj emoji">🌊</button>
           <input class="cat-name-inp" data-cn="0" value="Hav &amp; vatten" placeholder="Kategorinamn…">
         </div>
-        <span class="cat-chevron">▲</span>
+        <button type="button" class="cat-chevron" aria-label="Fäll ihop kategori" aria-expanded="true">▲</button>
       </div>
       <div class="cat-body">
         
@@ -1116,7 +1156,7 @@ footer{margin-top:20px;padding:14px 0;border-top:1px solid rgba(255,255,255,.06)
         <label class="lbl">Anthropic API-nyckel</label>
         <input class="inp" type="password" id="apiKey" placeholder="sk-ant-api03-…" autocomplete="off">
         <p class="api-note">
-          API-nyckeln lagras bara i din webbläsare. Skaffa nyckel på
+          API-nyckeln hålls bara i minnet under den här fliken och sparas inte. Skaffa nyckel på
           <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>.
         </p>
       </div>
@@ -1174,7 +1214,7 @@ KATEGORI: 🔢 Matematik
       </div>
 
       <!-- Upload area -->
-      <div id="dropZone" style="border:2px dashed var(--line);border-radius:14px;padding:28px;text-align:center;cursor:pointer;transition:.15s;margin-bottom:12px" onclick="$('fileInput').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
+      <div id="dropZone" role="button" tabindex="0" aria-label="Välj eller släpp en text- eller Word-fil" style="border:2px dashed var(--line);border-radius:14px;padding:28px;text-align:center;cursor:pointer;transition:.15s;margin-bottom:12px" onclick="$('fileInput').click()" ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropFile(event)">
         <div style="font-size:32px;margin-bottom:8px">📁</div>
         <div style="font-weight:700;margin-bottom:4px">Klicka eller dra hit din fil</div>
         <div class="small">Stöd för .txt och .docx</div>
@@ -1257,17 +1297,17 @@ KATEGORI: 🔢 Matematik
       <div class="card" style="grid-column:1/-1">
         <h3>🎮 Spelläge</h3>
         <div class="mode-grid" id="modePicker">
-          <div class="mode-card sel" data-mode="all">
+          <button type="button" class="mode-card sel" data-mode="all" aria-pressed="true">
             <div class="mode-icon">👥</div>
             <div class="mode-name">Alla svarar</div>
             <div class="mode-desc">Alla lag svarar på varje fråga och kan alla få poäng. Bäst för samarbete och lugn stämning.</div>
-          </div>
-          <div class="mode-card" data-mode="buzzer">
+          </button>
+          <button type="button" class="mode-card" data-mode="buzzer" aria-pressed="false">
             <div class="mode-icon">🔔</div>
             <div class="mode-name">Buzzerläge</div>
             <div class="mode-desc">Läraren klickar vilket lag som svarade först. Bara det laget svarar — snabbare och mer tävlingsinriktat.</div>
-          </div>
-          <div class="mode-card" data-mode="captain">
+          </button>
+          <div class="mode-card" data-mode="captain" style="display:none" aria-hidden="true">
             <div class="mode-icon">👑</div>
             <div class="mode-name">Lagkapten</div>
             <div class="mode-desc">Lagen turas om att svara, ett lag per fråga. Rättvist och turordningsbaserat. Kaptenrollen roterar.</div>
@@ -1351,7 +1391,7 @@ KATEGORI: 🔢 Matematik
             <input type="checkbox" id="hideScores" style="width:18px;height:18px;accent-color:var(--warn);cursor:pointer">
             <div>
               <div>🙈 Dölj poäng under spelet</div>
-              <div style="font-size:11px;font-weight:400;color:var(--muted);margin-top:2px">Poängen visas bara när alla 25 frågor är spelade</div>
+              <div style="font-size:11px;font-weight:400;color:var(--muted);margin-top:2px">Poängen visas när hela spelplanen är färdigspelad</div>
             </div>
           </label>
         </div>
@@ -1367,7 +1407,7 @@ KATEGORI: 🔢 Matematik
 </div>
 
 <!-- ══════════════ DIALOG: FRÅGA ══════════════ -->
-<dialog id="dlgQ">
+<dialog id="dlgQ" aria-labelledby="dlgCat dlgPts">
   <!-- Header-band: kategori + poäng + stäng -->
   <div class="dlg-header">
     <div>
@@ -1399,7 +1439,7 @@ KATEGORI: 🔢 Matematik
 
     <div class="timer-bar"><div class="timer-fill" id="timerFill"></div></div>
     <div class="timer-row">
-      <span class="timer-num" id="timerLeft">25 sek</span>
+      <span class="timer-num" id="timerLeft" aria-live="polite">25 sek</span>
       <button class="btn primary" id="btnShowAnswer">👁 Visa svar</button>
     </div>
 
@@ -1416,15 +1456,15 @@ KATEGORI: 🔢 Matematik
 
     <div class="a-display" id="dlgAnswer"></div>
     <div class="marking" id="markingArea"></div>
-    <div class="dialog-status" id="dlgStatus" style="display:none;margin-top:12px;font-size:13px;color:var(--muted);padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)"></div>
+    <div class="dialog-status" id="dlgStatus" role="status" aria-live="polite" style="display:none;margin-top:12px;font-size:13px;color:var(--muted);padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)"></div>
   </div>
 </dialog>
 
 <!-- ══════════════ DIALOG: MANUAL ══════════════ -->
-<dialog id="dlgInstructions">
+<dialog id="dlgInstructions" aria-labelledby="instructionsTitle">
   <div class="modal">
     <div class="modal-top">
-      <h2>📖 Manual – SkolQUIZ</h2>
+      <h2 id="instructionsTitle">📖 Manual – SkolQUIZ</h2>
       <button class="btn sm" id="btnCloseInstr">✕ Stäng</button>
     </div>
     <div class="modal-inner">
@@ -1441,26 +1481,26 @@ KATEGORI: 🔢 Matematik
         <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:12px">
           <div style="font-size:26px;margin-bottom:6px">2️⃣</div>
           <div style="font-size:13px;font-weight:700">Välj spelläge</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:4px">Alla svarar · Buzzer · Lagkapten</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">Alla svarar eller Buzzer</div>
         </div>
         <div style="background:rgba(255,255,255,.05);border-radius:10px;padding:12px">
           <div style="font-size:26px;margin-bottom:6px">3️⃣</div>
-          <div style="font-size:13px;font-weight:700">Klicka en ruta!</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:4px">Frågan visas — Visa svar när lagen är redo</div>
+          <div style="font-size:13px;font-weight:700">Låt lagen svara</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px">Handuppräckning, miniwhiteboards eller lappar — visa sedan svaret</div>
         </div>
       </div>
     </div>
 
     <!-- Game modes -->
-    <div style="font-size:15px;font-weight:900;margin-bottom:12px">🎮 Tre spellägen</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px">
+    <div style="font-size:15px;font-weight:900;margin-bottom:12px">🎮 Två spellägen</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
 
       <div style="border:1px solid var(--line);border-radius:12px;padding:14px">
         <div style="font-size:20px;margin-bottom:6px">👥</div>
         <div style="font-weight:900;margin-bottom:8px">Alla svarar</div>
         <ol style="margin:0 0 0 16px;font-size:12px;line-height:2;color:var(--muted)">
           <li>Välj poängruta</li>
-          <li>Alla lag svarar samtidigt (lapp, whiteboard…)</li>
+          <li>Alla lag svarar samtidigt med till exempel lapp eller whiteboard</li>
           <li>Klicka <strong style="color:var(--text)">Visa svar</strong></li>
           <li>Klicka ✅ Rätt / ❌ Fel per lag</li>
           <li>Alla rätta lag får poäng</li>
@@ -1475,31 +1515,20 @@ KATEGORI: 🔢 Matematik
         <div style="font-weight:900;margin-bottom:8px">Buzzerläge</div>
         <ol style="margin:0 0 0 16px;font-size:12px;line-height:2;color:var(--muted)">
           <li>Välj poängruta</li>
-          <li>Laget som vet svaret räcker upp handen</li>
+          <li>Laget som vet svaret räcker upp handen eller signalerar först</li>
           <li>Klicka på rätt lagknapp i appen</li>
           <li>Klicka <strong style="color:var(--text)">Visa svar</strong></li>
           <li>Markera rätt eller fel</li>
-          <li>Fel svar → "Ge annan chans" till annat lag</li>
+          <li>Vid fel kan du ge ett annat lag chansen</li>
         </ol>
         <div style="margin-top:10px;font-size:11px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:8px;color:#fde68a">
           💡 Bra för: tävlingsinriktat, snabbt tempo, äldre elever
         </div>
       </div>
+    </div>
 
-      <div style="border:1px solid var(--line);border-radius:12px;padding:14px">
-        <div style="font-size:20px;margin-bottom:6px">👑</div>
-        <div style="font-weight:900;margin-bottom:8px">Lagkapten</div>
-        <ol style="margin:0 0 0 16px;font-size:12px;line-height:2;color:var(--muted)">
-          <li>Det guldmarkerade laget svarar</li>
-          <li>Välj poängruta</li>
-          <li>Klicka <strong style="color:var(--text)">Visa svar</strong></li>
-          <li>Markera rätt eller fel</li>
-          <li>Nästa lag blir automatiskt kapten</li>
-        </ol>
-        <div style="margin-top:10px;font-size:11px;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:8px;padding:8px;color:#ddd6fe">
-          💡 Bra för: rättvist, alla lag svarar lika många gånger
-        </div>
-      </div>
+    <div style="background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:20px;font-size:13px;line-height:1.9;color:var(--muted)">
+      <strong style="color:var(--text)">Så svarar eleverna:</strong> appen samlar frågor, timer och poäng, men själva svarandet sker utanför appen. Kör till exempel med handuppräckning, miniwhiteboards, lappar eller muntliga svar och markera sedan rätt/fel i appen.
     </div>
 
     <!-- Keyboard shortcuts -->
@@ -1511,11 +1540,11 @@ KATEGORI: 🔢 Matematik
       </div>
       <div style="background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13px">
         <kbd style="background:rgba(255,255,255,.12);border-radius:5px;padding:2px 7px;font-family:monospace;font-size:12px">Escape</kbd>
-        &nbsp;Stäng frågan och gå tillbaka
+        &nbsp;Stäng frågan och gå tillbaka till tavlan
       </div>
     </div>
 
-    <!-- Spara & exportera -->
+    <!-- Spara -->
     <div style="font-size:15px;font-weight:900;margin-bottom:10px">💾 Spara — viktigt att känna till!</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
       <div style="background:rgba(94,174,255,.07);border:1px solid rgba(94,174,255,.25);border-radius:12px;padding:14px">
@@ -1523,33 +1552,45 @@ KATEGORI: 🔢 Matematik
         <div style="font-size:12px;color:var(--muted);line-height:1.7">Sparar i <strong style="color:var(--text)">webbläsarens minne på just den här datorn</strong>. Bra för att testa medan du jobbar — men försvinner om du byter dator eller webbläsare.</div>
         <div style="margin-top:8px;font-size:11px;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:7px;padding:7px;color:#fde68a">⚠️ Tänk på det som ett tillfälligt utkast.</div>
       </div>
-      <div style="background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.3);border-radius:12px;padding:14px">
-        <div style="font-weight:900;margin-bottom:5px;font-size:14px">📤 Exportera HTML — det riktiga sparandet</div>
-        <div style="font-size:12px;color:var(--muted);line-height:1.7">Skapar en ny fil med <strong style="color:var(--text)">allt inbakat</strong>. Fungerar på alla datorer. <strong style="color:var(--text)">Öppna alltid den exporterade filen</strong> nästa gång du vill bygga vidare.</div>
-        <div style="margin-top:8px;font-size:11px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:7px;padding:7px;color:#a7f3d0">✅ Exportera alltid när du är klar — det är din master.</div>
+      <div style="background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.22);border-radius:12px;padding:14px">
+        <div style="font-weight:900;margin-bottom:5px;font-size:14px">⬇️ Spara quiz-fil</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.7">Laddar ner en <strong style="color:var(--text)">.quiz-fil</strong> med frågor samt länkar till bilder och ljud. Det är det här formatet du ska använda när du vill bygga vidare på en annan dator eller dela med kollegor.</div>
+        <div style="margin-top:8px;font-size:11px;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.2);border-radius:7px;padding:7px;color:#a7f3d0">✅ Tänk på quiz-filen som din master.</div>
       </div>
     </div>
     <div style="background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:20px;font-size:13px;line-height:1.9;color:var(--muted)">
       <strong style="color:var(--text)">Rätt workflow för att bygga vidare:</strong><br>
-      1. Öppna den senaste <strong style="color:var(--text)">exporterade</strong> HTML-filen<br>
-      2. Redigera frågor och lägg ev. till bilder<br>
-      3. Klicka 💾 <strong style="color:var(--text)">Spara</strong> för att testa<br>
-      4. Klicka 📤 <strong style="color:var(--text)">Exportera HTML</strong> när du är nöjd — det är den nya mastern
+      1. Öppna appen i webbläsaren<br>
+      2. Ladda din senaste <strong style="color:var(--text)">.quiz-fil</strong> om du vill fortsätta på ett befintligt quiz<br>
+      3. Redigera frågor och lägg till bilder eller ljud<br>
+      4. Klicka 💾 <strong style="color:var(--text)">Spara</strong> när du jobbar klart i webbläsaren<br>
+      5. Klicka ⬇️ <strong style="color:var(--text)">Spara quiz-fil</strong> när du vill behålla eller dela quizet
     </div>
 
     <!-- Frågor -->
     <div style="font-size:15px;font-weight:900;margin-bottom:10px">📝 Lägga till egna frågor</div>
     <div style="background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:20px;font-size:13px;line-height:1.9;color:var(--muted)">
-      <strong style="color:var(--text)">Alternativ 1 – Redigera direkt i appen:</strong> Gå till fliken <em>Redigera frågor</em>. Klicka på en kategori för att vika ut den och ändra kategorins namn, frågor och svar. Exportera när du är klar.<br>
+      <strong style="color:var(--text)">Alternativ 1 – Redigera direkt i appen:</strong> Gå till fliken <em>Redigera frågor</em>. Klicka på en kategori för att vika ut den och ändra kategorins namn, frågor och svar. Spara quiz-fil när du är klar.<br>
       <strong style="color:var(--text)">Alternativ 2 – Importera från fil:</strong> Gå till <em>Hämta frågor → Importera egna frågor från fil</em>. Ladda ner mallen, fyll i dina frågor i Anteckningar eller Word, och ladda upp filen.<br>
       <strong style="color:var(--text)">Alternativ 3 – Open Trivia DB:</strong> Hämta engelska frågor direkt från en öppen databas med tusentals frågor — redigera sedan på svenska i redigeraren.<br>
-      <strong style="color:var(--text)">Alternativ 4 – Lägg till bilder:</strong> Klicka 🔍 Sök bild på valfri fråga i redigeraren. Sök via Wikimedia Commons eller klistra in en egen URL från Teams/OneDrive.
+      <strong style="color:var(--text)">Alternativ 4 – Lägg till bilder:</strong> Klicka 🔍 Sök bild på valfri fråga i redigeraren. Sök via Wikimedia Commons eller klistra in en egen URL från Teams/OneDrive.<br>
+      <strong style="color:var(--text)">Alternativ 5 – Lägg till ljud:</strong> Klicka 🔊 Lägg till ljud på valfri fråga. Du kan söka gratis ljud på Wikimedia Commons, klistra in en direkt ljudlänk eller använda en Spotify-länk för förhandslyssning.
+    </div>
+
+    <div style="font-size:15px;font-weight:900;margin-bottom:10px">🔊 Ljud och musik</div>
+    <div style="background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:20px;font-size:13px;line-height:1.9;color:var(--muted)">
+      Frågor kan ha både bild och ljud. Wikimedia Commons fungerar bra för djurljud, instrument och andra fria ljudklipp. Spotify fungerar som en snabb förhandslyssning direkt i frågan, men kan visa delar av låtinformationen — använd därför helst fria ljudfiler eller egna ljudlänkar om du vill dölja allt helt. Högst upp i appen kan du också slå på bakgrundsmusik och justera volymen.
+    </div>
+
+    <div style="font-size:15px;font-weight:900;margin-bottom:10px">🛠 Bra att känna till</div>
+    <div style="background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:20px;font-size:13px;line-height:1.9;color:var(--muted)">
+      I <em>Inställningar</em> kan du byta tema, välja antal lag, dölja poäng under spelet och ändra timern. Uppe i toppfältet finns också helskärm, musikknapp och volymreglage.
     </div>
 
     <!-- Dela med kollegor -->
     <div style="font-size:15px;font-weight:900;margin-bottom:10px">🤝 Dela med kollegor</div>
     <div style="background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:14px;font-size:13px;line-height:1.9;color:var(--muted)">
-      Gå till <em>Redigera frågor</em> → klicka <strong style="color:var(--text)">📤 Exportera HTML</strong>. Du får en ny HTML-fil med alla frågor (och bilder) inbakade. Skicka via Teams — mottagaren öppnar i webbläsaren och är redo direkt. Vill kollegan bygga vidare öppnar hen den mottagna filen, redigerar och exporterar en ny version.
+      Om ni använder samma app, till exempel via GitHub Pages, räcker det att skicka din <strong style="color:var(--text)">.quiz-fil</strong> via Teams eller OneDrive. Kollegan öppnar appen, klickar <strong style="color:var(--text)">Ladda quiz-fil</strong> och kan fortsätta bygga vidare eller spela quizet direkt.
     </div>
 
     </div>
@@ -1557,10 +1598,10 @@ KATEGORI: 🔢 Matematik
 </dialog>
 
 <!-- ══════════════ DIALOG: BILDSÖKNING ══════════════ -->
-<dialog id="dlgImgSearch">
+<dialog id="dlgImgSearch" aria-labelledby="imgSearchTitle">
   <div class="modal">
     <div class="modal-top">
-      <h2>🔍 Sök bild – Wikimedia Commons</h2>
+      <h2 id="imgSearchTitle">🔍 Sök bild – Wikimedia Commons</h2>
       <button class="btn sm" id="btnCloseImgSearch">✕ Stäng</button>
     </div>
     <div class="img-search-bar">
@@ -1589,10 +1630,10 @@ KATEGORI: 🔢 Matematik
 </dialog>
 
 <!-- ══════════════ DIALOG: LJUDSÖKNING ══════════════ -->
-<dialog id="dlgAudioSearch">
+<dialog id="dlgAudioSearch" aria-labelledby="audioSearchTitle">
   <div class="modal">
     <div class="modal-top">
-      <h2>🔊 Lägg till ljud</h2>
+      <h2 id="audioSearchTitle">🔊 Lägg till ljud</h2>
       <button class="btn sm" id="btnCloseAudioSearch">✕ Stäng</button>
     </div>
 
@@ -1648,7 +1689,7 @@ KATEGORI: 🔢 Matematik
 </dialog>
 
 <!-- ══════════════ DIALOG: VINNARE-REVEAL ══════════════ -->
-<dialog id="dlgWinner">
+<dialog id="dlgWinner" aria-labelledby="winnerHeadline">
   <div class="winner-inner">
     <canvas id="confettiCanvas"></canvas>
     <div class="winner-title-wrap" id="winnerTitleWrap">
@@ -1664,7 +1705,8 @@ KATEGORI: 🔢 Matematik
   </div>
 </dialog>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.11.0/mammoth.browser.min.js" integrity="sha512-Bpw1G70k1RT4pADRSajgVrcxVbAl0Ymw1UVr1EmeXxidZLp5MzAqkBx3zPK02UuvCnz4Ly7trvpJ1Zu/t2X1kQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="src/quiz-core.js"></script>
 <script>
 /* ================================================================
    DATA & CONSTANTS
@@ -1674,6 +1716,10 @@ const PREFS_KEY   = 'slattenskolan_v9_prefs';
 const EXPORT_ID   = /*§ID*/'base'/*§ID*/;
 
 const DEFAULT_QUIZ=/*§*/[{"category":"🌊 Hav & vatten","clues":[{"value":100,"question":"Vad kallas vatten som finns i havet?","answer":"Saltvatten"},{"value":200,"question":"Vad heter jordens största hav?","answer":"Stilla havet"},{"value":300,"question":"Vad kallas fruset havsvatten?","answer":"Is / packis"},{"value":400,"question":"Vad heter det fenomen då havet stiger och sjunker under dygnet?","answer":"Tidvatten (ebb och flod)"},{"value":500,"question":"Vad kallas vatten som rinner under marken och kan hämtas ur en brunn?","answer":"Grundvatten"}]},{"category":"🐾 Djur & natur","clues":[{"value":100,"question":"Vad heter djuret som säger 'mu'?","answer":"Ko"},{"value":200,"question":"Vad kallas djur som bara äter växter?","answer":"Växtätare / herbivorer"},{"value":300,"question":"Vad heter Sveriges största kattdjur i vilt tillstånd?","answer":"Lodjur"},{"value":400,"question":"Vilket träd producerar ekollon?","answer":"Ek"},{"value":500,"question":"Vad kallas det när fåglar flyger till varmare länder inför vintern?","answer":"Fågelflyttning"}]},{"category":"🇸🇪 Sverige","clues":[{"value":100,"question":"Vad heter Sveriges huvudstad?","answer":"Stockholm"},{"value":200,"question":"Vad heter Sveriges näst största stad?","answer":"Göteborg"},{"value":300,"question":"Vad heter Sveriges största sjö till ytan?","answer":"Vänern"},{"value":400,"question":"Vad heter det urfolk som lever i norra Sverige och Sápmi?","answer":"Samerna"},{"value":500,"question":"Vilket år fick kvinnor rätt att rösta i svenska val för första gången?","answer":"1921"}]},{"category":"🎮 Film, spel & musik","clues":[{"value":100,"question":"Vad heter den gula figuren som äter prickar i en labyrint?","answer":"Pac-Man"},{"value":200,"question":"Vad heter den italienska rörmokaren i Nintendos spel?","answer":"Mario"},{"value":300,"question":"Vad heter prinsessan i Frost som har iskrafter?","answer":"Elsa"},{"value":400,"question":"Vad kallas ett instrument med svarta och vita tangenter som man spelar med händerna?","answer":"Piano"},{"value":500,"question":"Vilket land vann Eurovision Song Contest flest gånger totalt?","answer":"Irland (7 gånger)"}]},{"category":"🧠 Kluringar","clues":[{"value":100,"question":"Vad är det som går och går men aldrig kommer fram?","answer":"Klockan"},{"value":200,"question":"Hur många månader på ett år har 28 dagar?","answer":"Alla 12 månader"},{"value":300,"question":"Vad har många nycklar men kan ändå inte låsa upp en dörr?","answer":"Ett piano"},{"value":400,"question":"Vad går alltid upp men aldrig ner?","answer":"Din ålder"},{"value":500,"question":"Ju mer du tar bort, desto större blir det. Vad är det?","answer":"Ett hål"}]}]/*§*/
+const defaultEurovisionClue = DEFAULT_QUIZ[3]?.clues?.[4];
+if (defaultEurovisionClue?.question === 'Vilket land vann Eurovision Song Contest flest gånger totalt?' && defaultEurovisionClue.answer === 'Irland (7 gånger)') {
+  defaultEurovisionClue.answer = 'Irland och Sverige (7 vinster vardera)';
+}
 
 const THEMES = {
   ocean:    {bg1:"#060e1a",bg2:"#0b1828",panel:"rgba(255,255,255,.055)",panel2:"rgba(255,255,255,.09)",line:"rgba(255,255,255,.11)",text:"#eef6ff",muted:"#94afc8",accent:"#5eaeff",accent2:"#a78bfa"},
@@ -1699,6 +1745,15 @@ const OTDB_CATS = [
 ];
 
 const TEAM_COLORS = ['#5eaeff','#a78bfa','#4ade80','#f87171','#fbbf24','#22d3ee','#fb923c','#86efac','#f0abfc','#67e8f9'];
+const {
+  POINTS: QUIZ_POINTS,
+  cloneQuiz,
+  isQuizComplete,
+  normalizeQuiz,
+  parseQuizText,
+  sanitizeMediaUrl,
+  totalClues,
+} = SkolQuizCore;
 
 /* ================================================================
    STATE
@@ -1724,7 +1779,6 @@ const S = {
   musicOn: false,
   audioUnlocked: false,
   theme: 'ocean',
-  apiKey: '',
   dirty: false,
 };
 
@@ -1738,19 +1792,28 @@ function loadQuizData() {
     if (stored) {
       // Om filen är en export med eget ID och det inte matchar lagrat ID → använd inbakade frågor
       if (EXPORT_ID !== 'base' && storedId !== EXPORT_ID) {
-        const embedded = JSON.parse(JSON.stringify(DEFAULT_QUIZ));
+        const embedded = normalizeQuiz(cloneQuiz(DEFAULT_QUIZ));
         localStorage.setItem(STORAGE_KEY, JSON.stringify(embedded));
         localStorage.setItem(STORAGE_KEY + '_id', EXPORT_ID);
         return embedded;
       }
-      return JSON.parse(stored);
+      const parsed = normalizeQuiz(JSON.parse(stored));
+      // Migrate the old, now ambiguous Eurovision answer without touching custom questions.
+      parsed.forEach(category => category.clues.forEach(clue => {
+        if (clue.question === 'Vilket land vann Eurovision Song Contest flest gånger totalt?' && clue.answer === 'Irland (7 gånger)') {
+          clue.answer = 'Irland och Sverige (7 vinster vardera)';
+        }
+      }));
+      return parsed;
     }
-  } catch(e) {}
-  return JSON.parse(JSON.stringify(DEFAULT_QUIZ));
+  } catch(e) { console.warn('Kunde inte läsa sparat quiz:', e.message); }
+  return normalizeQuiz(cloneQuiz(DEFAULT_QUIZ));
 }
 function persistQuiz(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  const normalized = normalizeQuiz(data);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
   localStorage.setItem(STORAGE_KEY + '_id', EXPORT_ID);
+  return normalized;
 }
 
 function loadPrefs() {
@@ -1762,9 +1825,9 @@ function loadPrefs() {
     if(p.vol != null) $('vol').value = p.vol;
     if(p.hideScores != null) S.hideScores = p.hideScores;
     if(p.theme) S.theme = p.theme;
-    if(p.mode) S.mode = p.mode;
+    if(p.mode === 'all' || p.mode === 'buzzer') S.mode = p.mode;
+    else if (p.mode === 'captain') S.mode = 'all';
     if(p.timerMs) S.timerMs = p.timerMs;
-    if(p.apiKey) S.apiKey = p.apiKey;
   } catch(e){}
 }
 function savePrefs() {
@@ -1772,7 +1835,7 @@ function savePrefs() {
     teamCount:S.teamCount, teams:S.teams.map(t=>({name:t.name})),
     musicOn:S.musicOn, vol:$('vol').value,
     hideScores:S.hideScores, theme:S.theme,
-    mode:S.mode, timerMs:S.timerMs, apiKey:S.apiKey
+    mode:S.mode, timerMs:S.timerMs
   }));
 }
 
@@ -1813,7 +1876,11 @@ function decodeHtml(s) {
    VIEWS / TABS
 ================================================================ */
 function switchView(name) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.v === name));
+  document.querySelectorAll('.tab').forEach(t => {
+    const active = t.dataset.v === name;
+    t.classList.toggle('active', active);
+    t.setAttribute('aria-selected', String(active));
+  });
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === `view-${name}`));
 }
 
@@ -1879,18 +1946,25 @@ function stripLeadingEmoji(str) {
 function renderBoard() {
   const board = $('board');
   board.innerHTML = '';
+  const columnCount = quizData.length;
+  board.style.gridTemplateColumns = `repeat(${columnCount}, minmax(140px, 1fr))`;
+  board.style.minWidth = `${Math.max(140, columnCount * 148)}px`;
   quizData.forEach(cat => {
     const d = document.createElement('div');
     d.className = 'cat-hdr';
+    d.setAttribute('role', 'columnheader');
     d.textContent = cat.category;
     board.appendChild(d);
   });
-  for (let r = 0; r < 5; r++) {
+  for (let r = 0; r < QUIZ_POINTS.length; r++) {
     for (let c = 0; c < quizData.length; c++) {
       const clue = quizData[c].clues[r];
       const key = `${c}-${r}`;
-      const d = document.createElement('div');
+      const d = document.createElement('button');
+      d.type = 'button';
       d.className = 'cell' + (S.used.has(key) ? ' used' : '');
+      d.disabled = S.used.has(key);
+      d.setAttribute('aria-label', `${quizData[c].category}, ${clue.value} poäng${S.used.has(key) ? ', redan spelad' : ''}`);
       const badges = [];
       if (clue.image) badges.push('📷');
       if (clue.audio) badges.push('🔊');
@@ -1916,9 +1990,11 @@ function openClue(col, row) {
   const clue = quizData[col].clues[row];
   S.currentClue = {col, row, ...clue};
   S.revealed = false;
+  S.answerShown = false;
   S.answeredTeams = new Set();
   S.correctTeams  = new Set();
   S.buzzerTeam = null;
+  $('dlgQ').classList.remove('grading-mode');
 
   $('dlgCat').textContent = quizData[col].category;
   $('dlgPts').textContent = clue.value + ' p';
@@ -1966,6 +2042,7 @@ function openClue(col, row) {
 
   const isBuzz = S.mode === 'buzzer';
   const isCap  = S.mode === 'captain';
+  $('btnShowAnswer').textContent = isBuzz ? '✅ Bedöm svar' : '👁 Visa svar';
 
   $('buzzerArea').style.display  = isBuzz ? 'block' : 'none';
   $('captainArea').style.display = isCap  ? 'block' : 'none';
@@ -1984,17 +2061,18 @@ function renderBuzzGrid() {
   grid.innerHTML = '';
   for (let i = 0; i < S.teamCount; i++) {
     const btn = document.createElement('button');
+    const alreadyAnswered = S.answeredTeams.has(i);
     btn.className = 'buzz-btn' + (S.buzzerTeam === i ? ' buzzed' : '');
-    btn.textContent = (S.buzzerTeam === i ? '🔔 ' : '') + S.teams[i].name;
+    btn.textContent = (S.buzzerTeam === i ? '🔔 ' : alreadyAnswered ? '✓ ' : '') + S.teams[i].name;
     btn.style.borderColor = S.buzzerTeam === i ? TEAM_COLORS[i] : 'rgba(255,255,255,.15)';
     btn.style.setProperty('--team-color', TEAM_COLORS[i]);
     if (S.buzzerTeam === i) btn.style.boxShadow = `0 0 20px ${TEAM_COLORS[i]}55`;
     else btn.style.boxShadow = '';
-    btn.disabled = S.buzzerTeam !== null && S.buzzerTeam !== i;
+    btn.disabled = alreadyAnswered || (S.buzzerTeam !== null && S.buzzerTeam !== i);
     btn.addEventListener('click', () => {
       S.buzzerTeam = i;
       renderBuzzGrid();
-      showStatus(`${S.teams[i].name} svarar! Klicka "Visa svar" när du är redo.`);
+      showStatus(`${S.teams[i].name} svarar! Klicka "Bedöm svar" när du är redo.`);
     });
     grid.appendChild(btn);
   }
@@ -2004,14 +2082,40 @@ function renderBuzzGrid() {
 function revealAnswer() {
   if (!S.currentClue) return;
   if (S.mode === 'buzzer' && S.buzzerTeam === null) {
-    showStatus('⚠️ Välj vilket lag som buzzade in innan du visar svaret.');
+    showStatus('⚠️ Välj vilket lag som buzzade in innan du bedömer svaret.');
+    return;
+  }
+  if (S.mode === 'buzzer') {
+    if (!S.revealed) {
+      S.revealed = true;
+      stopTimer();
+      stopClueAudio();
+      $('dlgQ').classList.add('grading-mode');
+      $('buzzerArea').style.display = 'none';
+      $('btnShowAnswer').textContent = '👁 Visa facit';
+      showStatus('Markera om laget svarade rätt. Facit är fortfarande dolt för klassen.');
+      renderMarking();
+      syncMusic();
+      return;
+    }
+    if (!S.answerShown) {
+      S.answerShown = true;
+      $('dlgAnswer').classList.add('show');
+      $('btnShowAnswer').textContent = '👁 Facit visas';
+      showStatus('Facit visas. Stäng frågan när ni är klara.');
+      renderMarking();
+      return;
+    }
     return;
   }
   S.revealed = true;
   stopTimer();
+  stopClueAudio();
+  $('dlgQ').classList.add('grading-mode');
   $('dlgAnswer').classList.add('show');
   showStatus('Markera vilka lag som hade rätt:');
   renderMarking();
+  syncMusic();
 }
 
 /* MARKING */
@@ -2054,17 +2158,19 @@ function renderMarking() {
   });
 
   // Buzzer: "give another team a chance"
-  if (S.mode === 'buzzer' && S.answeredTeams.size > 0) {
+  if (S.mode === 'buzzer' && S.answeredTeams.size > 0 && (!S.correctTeams || S.correctTeams.size === 0) && S.answeredTeams.size < S.teamCount && !S.answerShown) {
     const retry = document.createElement('button');
     retry.className = 'btn sm';
     retry.style.marginTop = '10px';
     retry.textContent = '🔔 Ge ett annat lag chansen';
     retry.addEventListener('click', () => {
+      S.revealed = false;
       S.buzzerTeam = null;
+      $('btnShowAnswer').textContent = '✅ Bedöm svar';
       renderBuzzGrid();
       renderMarking();
       $('buzzerArea').style.display = 'block';
-      showStatus('Välj nästa lag som vill svara.');
+      showStatus('Välj nästa lag som vill svara. Facit är fortfarande dolt.');
     });
     area.appendChild(retry);
   }
@@ -2094,6 +2200,10 @@ function renderMarking() {
 function animateScore(teamIdx, from, to) {
   const el = document.getElementById(`score-${teamIdx}`);
   if (!el || from === to) return;
+  if (S.hideScores && !S.scoresRevealed) {
+    el.textContent = '?';
+    return;
+  }
   const dur = 600, steps = 20;
   const diff = to - from;
   let step = 0;
@@ -2121,6 +2231,8 @@ function closeDialog() {
   stopTimer();
   stopClueAudio();
   $('btnStartAudioTimer').style.display = 'none';
+  $('btnShowAnswer').textContent = '👁 Visa svar';
+  $('dlgQ').classList.remove('grading-mode');
   $('dlgQ').close();
   if (S.currentClue) {
     S.used.add(`${S.currentClue.col}-${S.currentClue.row}`);
@@ -2146,7 +2258,7 @@ function closeDialog() {
 }
 
 function checkWinner() {
-  if (S.used.size !== 25) return;
+  if (!isQuizComplete(S.used, quizData)) return;
   S.scoresRevealed = true;
   renderTeams();
   setTimeout(showWinnerReveal, 600); // kort paus efter sista frågan stängs
@@ -2274,7 +2386,13 @@ function showSpotifyPreview(url) {
 
 function applyAudioToClue(url) {
   const { ci, qi } = AS;
-  quizData[ci].clues[qi].audio = url || '';
+  try {
+    url = sanitizeMediaUrl(url, 'Ljudlänken');
+  } catch (e) {
+    alert(e.message);
+    return;
+  }
+  quizData[ci].clues[qi].audio = url;
   const lbl = document.querySelector(`[data-albl="${ci}-${qi}"]`);
   const row = lbl ? lbl.closest('.audio-editor-row') : null;
   if (lbl) lbl.textContent = url
@@ -2468,17 +2586,26 @@ function tickTimer() {
 /* ================================================================
    NEW ROUND
 ================================================================ */
-function newRound() {
-  if (!confirm('Starta ny omgång? Poäng och tavla återställs.')) return;
+function resetRoundState() {
   if ($('dlgWinner') && $('dlgWinner').open) stopWinnerReveal();
+  if ($('dlgQ').open) $('dlgQ').close();
+  stopTimer();
+  stopClueAudio();
   S.used = new Set();
   S.scoresRevealed = false;
   S.captainIdx = 0;
   S.teams.forEach(t => { t.score = 0; });
   S.currentClue = null;
-  if ($('dlgQ').open) $('dlgQ').close();
-  stopTimer();
+  S.revealed = false;
+  S.answeredTeams = new Set();
+  S.correctTeams = new Set();
+  S.buzzerTeam = null;
   renderTeams(); renderBoard();
+}
+
+function newRound() {
+  if (!confirm('Starta ny omgång? Poäng och tavla återställs.')) return;
+  resetRoundState();
 }
 
 /* ================================================================
@@ -2532,14 +2659,16 @@ function renderEditor() {
 
   wrap.innerHTML = '';
 
-  // Remove any old popup
-  const oldPopup = document.getElementById('emojiPopup');
-  if (oldPopup) oldPopup.remove();
-
-  // Shared popup element
-  const popup = document.createElement('div');
-  popup.className = 'emoji-popup';
-  popup.id = 'emojiPopup';
+  // Reuse one shared popup so re-rendering the editor cannot duplicate IDs or listeners.
+  let popup = document.getElementById('emojiPopup');
+  if (!popup) {
+    popup = document.createElement('div');
+    popup.className = 'emoji-popup';
+    popup.id = 'emojiPopup';
+    popup.dataset.runtime = 'true';
+    document.body.appendChild(popup);
+  }
+  popup.replaceChildren();
   EMOJIS.forEach(em => {
     const b = document.createElement('button');
     b.className = 'emoji-btn';
@@ -2547,15 +2676,6 @@ function renderEditor() {
     b.type = 'button';
     popup.appendChild(b);
   });
-  document.body.appendChild(popup);
-
-  // Close popup on outside click
-  document.addEventListener('pointerdown', e => {
-    if (!popup.contains(e.target) && !e.target.classList.contains('cat-emoji-trigger')) {
-      popup.classList.remove('open');
-    }
-  });
-
   quizData.forEach((cat, ci) => {
     const block = document.createElement('div');
     block.className = 'cat-block open';
@@ -2571,12 +2691,12 @@ function renderEditor() {
       <div class="cat-body">
         ${cat.clues.map((cl,qi) => `
           <div class="q-row">
-            <div class="q-pts">${cl.value}</div>
+            <div class="q-pts">${esc(cl.value)}</div>
             <div>
               <label class="lbl">Fråga</label>
               <textarea data-q="${ci}-${qi}" rows="2">${esc(cl.question)}</textarea>
               <div class="img-editor-row">
-                <img class="img-editor-thumb" data-ethumb="${ci}-${qi}" src="${cl.image||''}" alt="" style="display:${cl.image?'block':'none'}">
+                <img class="img-editor-thumb" data-ethumb="${ci}-${qi}" src="${esc(cl.image||'')}" alt="" style="display:${cl.image?'block':'none'}">
                 <span class="img-editor-lbl" data-elbl="${ci}-${qi}">${cl.image?'📷 Bild tillagd':'Ingen bild'}</span>
                 <button type="button" class="btn sm primary" data-imgsearch="${ci}-${qi}">🔍 Sök bild</button>
               </div>
@@ -2600,7 +2720,11 @@ function renderEditor() {
       if (e.target.classList.contains('cat-name-inp')) return;
       if (e.target.classList.contains('cat-emoji-trigger')) return;
       block.classList.toggle('open');
-      block.querySelector('.cat-chevron').textContent = block.classList.contains('open') ? '▲' : '▼';
+      const chevron = block.querySelector('.cat-chevron');
+      const isOpen = block.classList.contains('open');
+      chevron.textContent = isOpen ? '▲' : '▼';
+      chevron.setAttribute('aria-expanded', String(isOpen));
+      chevron.setAttribute('aria-label', isOpen ? 'Fäll ihop kategori' : 'Fäll ut kategori');
     });
 
     // Emoji picker trigger
@@ -2685,10 +2809,15 @@ function setBadge(cls, txt) {
 }
 
 function saveEditor() {
-  persistQuiz(quizData);
-  S.dirty = false;
-  setBadge('saved','✅ Sparat!');
-  renderBoard();
+  try {
+    quizData = persistQuiz(quizData);
+    S.dirty = false;
+    setBadge('saved','✅ Sparat!');
+    renderEditor(); renderBoard();
+  } catch (e) {
+    setBadge('unsaved', '⚠️ Kontrollera frågorna');
+    alert('Quizet kunde inte sparas:\n\n' + e.message);
+  }
 }
 
 function exportHtml() {
@@ -2712,6 +2841,7 @@ function exportHtml() {
 
 async function saveJson() {
   try {
+    quizData = normalizeQuiz(quizData);
     const dateStr = new Date().toISOString().slice(0,10);
     const payload = JSON.stringify({ version: 1, saved: new Date().toISOString(), quiz: quizData }, null, 2);
     const blob = new Blob([payload], {type: 'application/json'});
@@ -2727,6 +2857,7 @@ async function saveJson() {
         await ws.write(blob);
         await ws.close();
         setBadge('saved', '⬇️ Quiz-fil sparad!');
+        S.dirty = false;
         return;
       } catch(e) {
         if (e.name === 'AbortError') return; // Användaren avbröt dialogen
@@ -2742,6 +2873,7 @@ async function saveJson() {
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 3000);
     setBadge('saved', '⬇️ Quiz-fil sparad!');
+    S.dirty = false;
   } catch(e) { alert('Kunde inte spara filen: ' + e.message); }
 }
 
@@ -2749,25 +2881,19 @@ async function loadJsonFile(file) {
   try {
     const text    = await file.text();
     const payload = JSON.parse(text);
-    const data    = Array.isArray(payload) ? payload : payload.quiz;
-    if (!Array.isArray(data) || data.length === 0) {
-      alert('Det här verkar inte vara en giltig quiz-fil.');
-      return;
-    }
+    const data    = normalizeQuiz(Array.isArray(payload) ? payload : payload.quiz);
     if (!confirm('Ladda in "' + file.name + '"?\n\nDetta ersätter de nuvarande frågorna.')) return;
-    quizData = data;
-    persistQuiz(quizData);
+    quizData = persistQuiz(data);
     S.dirty = false;
-    renderEditor(); renderBoard();
+    renderEditor(); resetRoundState();
     setBadge('saved', '📂 Laddad: ' + file.name);
   } catch(e) { alert('Kunde inte läsa filen: ' + e.message); }
 }
 
 function resetEditor() {
   if (!confirm('Återställ alla frågor till standardfrågorna?')) return;
-  quizData = JSON.parse(JSON.stringify(DEFAULT_QUIZ));
-  persistQuiz(quizData);
-  renderEditor(); renderBoard();
+  quizData = persistQuiz(cloneQuiz(DEFAULT_QUIZ));
+  renderEditor(); resetRoundState();
   setBadge('saved','✅ Återställt');
   S.dirty = false;
 }
@@ -2782,8 +2908,6 @@ async function generateAI() {
 
   if (!topic)  { $('aiStatus').textContent = '⚠️ Ange ett ämne.'; return; }
   if (!apiKey) { $('aiStatus').textContent = '⚠️ Ange din API-nyckel.'; return; }
-
-  S.apiKey = apiKey; savePrefs();
 
   $('btnGenAI').disabled = true;
   $('aiStatus').innerHTML = '<span class="spin"></span>Genererar quiz på svenska…';
@@ -2825,10 +2949,7 @@ Svara ENBART med giltig JSON, inget annat, inga kommentarer, inga backticks:
     const m = text.match(/\[[\s\S]*\]/);
     if (!m) throw new Error('Oväntat svar från AI. Prova igen.');
     const gen = JSON.parse(m[0]);
-    if (!Array.isArray(gen)||gen.length<1) throw new Error('Felaktigt format.');
-
-    // Ensure exactly 5 cats
-    pendingData = gen.slice(0,5);
+    pendingData = normalizeQuiz(gen);
     renderPreview('ai', pendingData);
     $('aiStatus').textContent = `✅ Quiz genererat med ${pendingData.length} kategorier!`;
     $('aiPreviewWrap').style.display = 'block';
@@ -2869,6 +2990,12 @@ function dropFile(e) {
 $('fileInput').addEventListener('change', () => {
   if ($('fileInput').files[0]) handleImportFile($('fileInput').files[0]);
 });
+$('dropZone').addEventListener('keydown', event => {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    $('fileInput').click();
+  }
+});
 
 async function handleImportFile(file) {
   $('importStatus').textContent = '⏳ Läser fil…';
@@ -2906,74 +3033,7 @@ async function handleImportFile(file) {
 }
 
 function parseImportText(raw) {
-  const PTS = [100,200,300,400,500];
-  const lines = raw.split(/\r?\n/);
-  const cats  = [];
-  const errors = [];
-  let cur = null;
-
-  for (let li = 0; li < lines.length; li++) {
-    const line = lines[li].trim();
-    if (!line || line.startsWith('#')) continue;
-
-    // Category header
-    if (/^kategori\s*:/i.test(line)) {
-      if (cur) {
-        validateCat(cur, errors);
-        cats.push(cur);
-      }
-      cur = { category: line.replace(/^kategori\s*:/i,'').trim(), clues: [] };
-      continue;
-    }
-
-    // Question row: 100 | Fråga | Svar
-    if (cur && line.includes('|')) {
-      const parts = line.split('|').map(p => p.trim());
-      if (parts.length < 3) {
-        errors.push(`Rad ${li+1}: Fel format — behöver "poäng | fråga | svar"`);
-        continue;
-      }
-      const val = parseInt(parts[0]);
-      if (!PTS.includes(val)) {
-        errors.push(`Rad ${li+1}: Ogiltigt poängvärde "${parts[0]}" — måste vara 100, 200, 300, 400 eller 500`);
-        continue;
-      }
-      if (cur.clues.length >= 5) {
-        errors.push(`Kategori "${cur.category}": Fler än 5 frågor — extra frågor ignoreras`);
-        continue;
-      }
-      cur.clues.push({ value: val, question: parts[1], answer: parts.slice(2).join('|').trim() });
-    }
-  }
-
-  if (cur) {
-    validateCat(cur, errors);
-    cats.push(cur);
-  }
-
-  // Auto-sort clues by value
-  cats.forEach(c => c.clues.sort((a,b) => a.value - b.value));
-
-  // Fill missing point values if fewer than 5 questions (pad with placeholders)
-  cats.forEach(c => {
-    const existing = new Set(c.clues.map(cl => cl.value));
-    PTS.forEach(p => {
-      if (!existing.has(p)) {
-        c.clues.push({ value: p, question: '(Ingen fråga angiven)', answer: '—' });
-        errors.push(`Kategori "${c.category}": Saknar ${p}p-fråga — platshållare tillagd`);
-      }
-    });
-    c.clues.sort((a,b) => a.value - b.value);
-  });
-
-  return { data: cats.slice(0,5), errors };
-}
-
-function validateCat(cat, errors) {
-  if (!cat.category) errors.push('En kategori saknar namn');
-  if (cat.clues.length < 5) {
-    errors.push(`Kategori "${cat.category}": Bara ${cat.clues.length} frågor — 5 krävs`);
-  }
+  return parseQuizText(raw);
 }
 
 // Download template
@@ -3176,10 +3236,17 @@ function renderPreview(type, data) {
 
 function loadPending(type) {
   if (!pendingData) return;
+  let normalized;
+  try {
+    normalized = normalizeQuiz(pendingData);
+  } catch (e) {
+    alert('Frågorna kunde inte laddas:\n\n' + e.message);
+    return;
+  }
   if (!confirm('Ersätta nuvarande frågor med de importerade?')) return;
-  quizData = JSON.parse(JSON.stringify(pendingData));
-  persistQuiz(quizData);
-  renderEditor(); renderBoard();
+  quizData = persistQuiz(normalized);
+  renderEditor(); resetRoundState();
+  S.dirty = false;
   pendingData = null;
   if (type === 'ai') {
     $('aiPreviewWrap').style.display = 'none';
@@ -3201,7 +3268,9 @@ function loadPending(type) {
 ================================================================ */
 function syncModePicker() {
   document.querySelectorAll('.mode-card').forEach(c => {
-    c.classList.toggle('sel', c.dataset.mode === S.mode);
+    const selected = c.dataset.mode === S.mode;
+    c.classList.toggle('sel', selected);
+    if (c.tagName === 'BUTTON') c.setAttribute('aria-pressed', String(selected));
   });
 }
 
@@ -3248,7 +3317,7 @@ async function wikimediaSearch(query) {
       const title = page.title.replace('File:','').replace(/_/g,' ');
       const card  = document.createElement('div');
       card.className = 'img-thumb' + (IS.url === full ? ' sel' : '');
-      card.innerHTML = `<img src="${thumb}" alt="${esc(title)}" loading="lazy"><div class="img-thumb-title">${esc(title)}</div>`;
+      card.innerHTML = `<img src="${esc(thumb)}" alt="${esc(title)}" loading="lazy"><div class="img-thumb-title">${esc(title)}</div>`;
       card.addEventListener('click', () => {
         document.querySelectorAll('.img-thumb').forEach(c => c.classList.remove('sel'));
         card.classList.add('sel');
@@ -3269,7 +3338,13 @@ async function wikimediaSearch(query) {
 
 function applyImgToClue(url) {
   const {ci, qi} = IS;
-  quizData[ci].clues[qi].image = url || '';
+  try {
+    url = sanitizeMediaUrl(url, 'Bildlänken');
+  } catch (e) {
+    alert(e.message);
+    return;
+  }
+  quizData[ci].clues[qi].image = url;
   // Update editor row
   const thumb = document.querySelector(`[data-ethumb="${ci}-${qi}"]`);
   const lbl   = document.querySelector(`[data-elbl="${ci}-${qi}"]`);
@@ -3409,7 +3484,6 @@ $('btnLoadAI').addEventListener('click', () => loadPending('ai'));
 $('btnDiscardAI').addEventListener('click', () => {
   $('aiPreviewWrap').style.display = 'none'; pendingData = null;
 });
-$('apiKey').addEventListener('input', () => { S.apiKey = $('apiKey').value; savePrefs(); });
 
 // Fetch - OTDB
 $('btnFetchOtdb').addEventListener('click', fetchOtdb);
@@ -3436,10 +3510,9 @@ $('timerRange').addEventListener('input', updateTimerUI);
 // Mode picker
 document.querySelectorAll('.mode-card').forEach(card => {
   card.addEventListener('click', () => {
-    document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('sel'));
-    card.classList.add('sel');
     S.mode = card.dataset.mode;
     S.captainIdx = 0;
+    syncModePicker();
     renderTeams(); renderBoard(); savePrefs();
   });
 });
@@ -3463,6 +3536,19 @@ document.addEventListener('pointerdown', () => {
   if (!S.audioUnlocked) unlockAudio();
 }, {once:true});
 
+// One global outside-click handler for the shared emoji picker.
+document.addEventListener('pointerdown', e => {
+  const popup = document.querySelector('#emojiPopup[data-runtime="true"]');
+  if (popup && !popup.contains(e.target) && !e.target.classList.contains('cat-emoji-trigger')) {
+    popup.classList.remove('open');
+  }
+});
+
+// Remove the legacy pre-rendered popup once the parser has reached the end of the document.
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('#emojiPopup:not([data-runtime="true"])').forEach(element => element.remove());
+});
+
 // Unsaved warning
 window.addEventListener('beforeunload', e => {
   if (S.dirty) { e.preventDefault(); e.returnValue = ''; }
@@ -3481,7 +3567,6 @@ $('hideScores').checked = S.hideScores;
 $('timerRange').value = String(S.timerMs / 1000);
 $('timerVal').textContent = S.timerMs / 1000;
 $('timerLbl').textContent = `⏱ ${S.timerMs/1000} sek`;
-if (S.apiKey) $('apiKey').value = S.apiKey;
 syncModePicker();
 
 renderTeamInputs();

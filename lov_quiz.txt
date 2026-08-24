@@ -1,0 +1,34 @@
+KATEGORI: 🐣 Påsk
+100 | Vilket djur förknippas mest med påsk? | Kyckling
+200 | Vad kallas godiset man får på påsk? | Påskgodis
+300 | Vad brukar man måla och dekorera till påsk? | Ägg
+400 | Vad heter figuren som delar ut påskägg? | Påskharen
+500 | Vad kallas veckan innan påsk? | Stilla veckan
+
+KATEGORI: ⚽ Sport
+100 | Vad använder man för att spela fotboll? | Boll
+200 | Hur många spelare är det i ett fotbollslag på planen? | 11
+300 | I vilken sport använder man en klubba och puck? | Ishockey
+400 | Vad heter sporten där man kastar en boll och slår med ett racket över ett nät? | Tennis
+500 | Vad heter tävlingen med fem ringar i loggan? | OS
+
+KATEGORI: 🎬 Film & TV
+100 | Vad heter den gula figuren som bor i en ananas under havet? | SvampBob
+200 | Vad heter isprinsessan i Frost? | Elsa
+300 | Vad heter pojken som kan trolla i Harry Potter? | Harry Potter
+400 | Vad heter filmen med lejonet Simba? | Lejonkungen
+500 | Vad heter den gröna figuren i Shrek? | Shrek
+
+KATEGORI: 🎮 Spel & Lek
+100 | Vad hoppar Mario på för att besegra fiender? | Fiender
+200 | Vad heter spelet där man bygger med klossar och överlever? | Minecraft
+300 | Vad kastar man i bowling? | Klot
+400 | Vad heter spelet där man fångar monster i små bollar? | Pokémon
+500 | Vad heter spelet där man springer runt och skjuter färg? | Splatoon
+
+KATEGORI: 🧠 Allmänbildning
+100 | Hur många ben har en spindel? | 8
+200 | Vilket djur säger "mjau"? | Katt
+300 | Hur många dagar är det på ett år? | 365
+400 | Vad heter vår planet? | Jorden
+500 | Vilken färg får man om man blandar blått och gult? | Grön

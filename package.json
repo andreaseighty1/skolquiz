@@ -1,0 +1,13 @@
+{
+  "name": "skolquiz",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Jeopardy-inspirerat quiz för klassrummet",
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check src/quiz-core.js && node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
