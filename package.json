@@ -5,7 +5,7 @@
   "description": "Jeopardy-inspirerat quiz för klassrummet",
   "scripts": {
     "test": "node --test",
-    "check": "node --check src/quiz-core.js && node --test"
+    "check": "node --check src/quiz-core.js && node --check src/app.js && node --test"
   },
   "engines": {
     "node": ">=20"
